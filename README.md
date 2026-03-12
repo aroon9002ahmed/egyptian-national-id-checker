@@ -24,33 +24,73 @@ composer require aroon/egyptian-national-id-checker
 ```php
 use Aroon\EgyptianNationalId\EgyptianNationalId;
 
-// It automatically cleans spaces, dashes, and Arabic/Hindi numbers!
+// 1. Basic Parsing and Validation
 $id = new EgyptianNationalId('٢٩٠-٠١٠١ ١٢٣ ٤٥٦٧');
 
-// Validate the ID (length, date, century, governorate, and check digit)
-$isValid = $id->isValid(); // boolean
-
-if ($isValid) {
-    // Parsing information
+if ($id->isValid()) {
     $id->getBirthYear();      // 1990
-    $id->getBirthMonth();     // 1
-    $id->getBirthDay();       // 1
-    $id->getAge();            // e.g. 34 (based on current year)
-    
-    $id->getGovernorateCode(); // "12"
-    $id->getGovernorateName(); // "Dakahlia"
-    $id->getRegion();          // "Delta"
-    
-    $id->getGender();          // "female"
-    $id->isMale();             // false
-    $id->isFemale();           // true
-    
-    $id->isAdult();            // true
-    $id->isInsideEgypt();      // true
-    
-    // Get all parsed data as an array
+    $id->getGender();         // "female"
+    $id->isAdult();           // true
+    $id->getGovernorateName();// "Cairo"
     $data = $id->toArray();
 }
+```
+
+### 🧠 Static Safe Helpers
+Need a quick answer without crashing or handling invalid objects? Use the static safe helpers. They return `false` gracefully if the ID is malformed.
+
+```php
+EgyptianNationalId::isValidId('29001011234567');   // true
+EgyptianNationalId::checkIsMale('29001011234567'); // false
+EgyptianNationalId::checkIsAdult('29001011234567');// true
+```
+
+### 🎲 ID Generator (For Testing/Factories)
+Generate 100% mathematically correct National IDs matching precise criteria, great for Unit Tests:
+
+```php
+// Generate a completely random valid ID
+$randomId = EgyptianNationalId::generate();
+
+// Customize generation (e.g. Female, born in 1990, from Cairo)
+$specificId = EgyptianNationalId::generate([
+    'gender' => 'female',
+    'year' => 1990,
+    'governorate' => '01' // Cairo
+]);
+```
+
+### 🎛️ Data Engine (Collections and Big Data)
+To analyze arrays or databases packed with thousands of IDs, use `EgyptianNationalIdEngine`:
+
+```php
+use Aroon\EgyptianNationalId\EgyptianNationalIdEngine;
+
+$dataset = ['29001011234567', '30205051234567', 'invalid_id'];
+
+$engine = EgyptianNationalIdEngine::make($dataset);
+
+// 1. Filter out IDs easily
+$onlyMales = $engine->filter(fn($id) => $id->isMale());
+
+// 2. Extract quick demographics & statistics
+$stats = $engine->stats();
+/*
+{
+    "total": 2,
+    "males": 1,
+    "females": 1,
+    "adults": 2,
+    "governorates": { "Cairo": 1, "Alexandria": 1 }
+}
+*/
+
+// 3. Merge parsed real-world analysis into your original arrays
+$users = [
+    ['name' => 'Ahmed', 'national_id' => '29001011234567']
+];
+$analyzedUsers = $engine->mapWithAnalysis($users, 'national_id');
+// Output will now contain an 'analysis' array attached to Ahmed's row with his birthday, gender, etc.
 ```
 
 ## Usage in Laravel

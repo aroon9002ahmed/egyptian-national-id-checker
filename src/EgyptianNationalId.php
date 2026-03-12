@@ -45,7 +45,7 @@ class EgyptianNationalId
         $this->idStr = self::sanitize((string) $id);
     }
 
-    private static function sanitize(string $id): string
+    public static function sanitize(string $id): string
     {
         // Convert Arabic/Hindi numerals to English numerals
         $arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -59,6 +59,82 @@ class EgyptianNationalId
     public static function parse(string|int $id): self
     {
         return new self($id);
+    }
+
+    // --- Static Safe Helpers ---
+
+    public static function isValidId(string|int $id): bool
+    {
+        try {
+            return (new self($id))->isValid();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function checkIsMale(string|int $id): bool
+    {
+        $instance = new self($id);
+        return $instance->isValid() && $instance->isMale();
+    }
+
+    public static function checkIsFemale(string|int $id): bool
+    {
+        $instance = new self($id);
+        return $instance->isValid() && $instance->isFemale();
+    }
+
+    public static function checkIsAdult(string|int $id): bool
+    {
+        $instance = new self($id);
+        return $instance->isValid() && $instance->isAdult();
+    }
+
+    // --- Generator ---
+
+    public static function generate(array $options = []): string
+    {
+        $year = $options['year'] ?? random_int(1950, (int) date('Y'));
+        $month = $options['month'] ?? random_int(1, 12);
+        
+        $maxDay = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $day = $options['day'] ?? random_int(1, $maxDay);
+        
+        if (isset($options['governorate'])) {
+            $gov = str_pad((string)$options['governorate'], 2, '0', STR_PAD_LEFT);
+        } else {
+            $govKeys = array_keys(self::GOVERNORATES);
+            $gov = (string) $govKeys[array_rand($govKeys)];
+        }
+        
+        $centuryDigit = ($year >= 2000) ? 3 : 2;
+        $yearDigits = substr((string) $year, -2);
+        $monthDigits = str_pad((string) $month, 2, '0', STR_PAD_LEFT);
+        $dayDigits = str_pad((string) $day, 2, '0', STR_PAD_LEFT);
+        
+        $isFemale = isset($options['gender']) 
+            ? ($options['gender'] === 'female') 
+            : (random_int(0, 1) === 0);
+        
+        $sequenceStart = str_pad((string) random_int(0, 999), 3, '0', STR_PAD_LEFT);
+        
+        if ($isFemale) {
+            $genderDigit = random_int(0, 4) * 2;
+        } else {
+            $genderDigit = random_int(0, 4) * 2 + 1;
+        }
+        
+        $idWithoutCheck = $centuryDigit . $yearDigits . $monthDigits . $dayDigits . $gov . $sequenceStart . $genderDigit;
+        
+        $multipliers = [2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+        $sum = 0;
+        for ($i = 0; $i < 13; $i++) {
+            $sum += ((int) $idWithoutCheck[$i]) * $multipliers[$i];
+        }
+        $remainder = $sum % 11;
+        $checkDigit = abs(11 - $remainder) % 10;
+        
+        return $idWithoutCheck . $checkDigit;
     }
 
     public function isValid(): bool

@@ -9,7 +9,7 @@ Based on the algorithm and logic from [mahmoudEbeid2/egyptian-national-id](https
 You can install the package via Composer:
 
 ```bash
-composer require aroon/egyptian-national-id
+composer require aroon/egyptian-national-id-checker
 ```
 
 *(Note: Ensure you are requiring the local path in your project if you haven't published it to Packagist).*

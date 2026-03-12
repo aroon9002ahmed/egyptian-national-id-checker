@@ -14,12 +14,18 @@ composer require aroon/egyptian-national-id-checker
 
 *(Note: Ensure you are requiring the local path in your project if you haven't published it to Packagist).*
 
+## Features
+- **Sanitization**: Automatically cleans input by converting Arabic/Hindi numerals (٠-٩) to English numerals and stripping spaces or dashes.
+- **Validation**: Strict validation of the 14-digit format, century, birth date, governorate code, and check digit.
+- **Data extraction**: Easily extract birth date, gender, governorate, and age.
+
 ## Usage in PHP
 
 ```php
 use Aroon\EgyptianNationalId\EgyptianNationalId;
 
-$id = new EgyptianNationalId('29001011234567');
+// It automatically cleans spaces, dashes, and Arabic/Hindi numbers!
+$id = new EgyptianNationalId('٢٩٠-٠١٠١ ١٢٣ ٤٥٦٧');
 
 // Validate the ID (length, date, century, governorate, and check digit)
 $isValid = $id->isValid(); // boolean

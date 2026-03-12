@@ -42,7 +42,18 @@ class EgyptianNationalId
 
     public function __construct(string|int $id)
     {
-        $this->idStr = (string) $id;
+        $this->idStr = self::sanitize((string) $id);
+    }
+
+    private static function sanitize(string $id): string
+    {
+        // Convert Arabic/Hindi numerals to English numerals
+        $arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $englishNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $id = str_replace($arabicNumerals, $englishNumerals, $id);
+
+        // Remove any non-digit characters (spaces, dashes, etc.)
+        return preg_replace('/[^\d]/', '', $id);
     }
 
     public static function parse(string|int $id): self

@@ -50,4 +50,22 @@ class EgyptianNationalIdTest extends TestCase
         $nationalId = new EgyptianNationalId('29013011234567');
         $this->assertFalse($nationalId->isValid());
     }
+    
+    public function test_input_sanitization()
+    {
+        // ID with spaces and dashes
+        $id1 = new EgyptianNationalId('290-0101 123 4567');
+        $this->assertEquals(1990, $id1->getBirthYear());
+        $this->assertEquals(1, $id1->getBirthMonth());
+
+        // ID with Arabic/Hindi numerals
+        $id2 = new EgyptianNationalId('٢٩٠٠١٠١١٢٣٤٥٦٧');
+        $this->assertEquals(1990, $id2->getBirthYear());
+        $this->assertEquals(1, $id2->getBirthMonth());
+
+        // ID with mixed spaces, dashes, and Arabic numerals
+        $id3 = new EgyptianNationalId('٢٩٠-٠١٠١ ١٢٣ ٤٥٦٧');
+        $this->assertEquals(1990, $id3->getBirthYear());
+        $this->assertEquals(1, $id3->getBirthMonth());
+    }
 }

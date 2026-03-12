@@ -1,5 +1,5 @@
 {
-    "name": "aroon/egyptian-national-id",
+    "name": "aroon/egyptian-national-id-checker",
     "description": "A PHP package to parse and validate Egyptian National IDs, with Laravel support.",
     "type": "library",
     "license": "MIT",

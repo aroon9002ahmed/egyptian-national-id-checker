@@ -1,8 +1,14 @@
 {
     "name": "aroon/egyptian-national-id-checker",
     "description": "A PHP package to parse and validate Egyptian National IDs, with Laravel support.",
+    "keywords": ["egypt", "national-id", "validation", "laravel", "php"],
+    "homepage": "https://github.com/aroon9002ahmed/egyptian-national-id-checker",
     "type": "library",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/aroon9002ahmed/egyptian-national-id-checker/issues",
+        "source": "https://github.com/aroon9002ahmed/egyptian-national-id-checker"
+    },
     "authors": [
         {
             "name": "Ahmed Saad Hassan",

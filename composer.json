@@ -1,0 +1,39 @@
+{
+    "name": "aroon/egyptian-national-id",
+    "description": "A PHP package to parse and validate Egyptian National IDs, with Laravel support.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahmed Saad Hassan",
+            "email": "alfker3@gmail.com",
+            "role": "Developer (Phone: +201005222130)"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/validation": "^10.0|^11.0",
+        "phpunit/phpunit": "^10.0|^11.0",
+        "orchestra/testbench": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aroon\\EgyptianNationalId\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aroon\\EgyptianNationalId\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aroon\\EgyptianNationalId\\EgyptianNationalIdServiceProvider"
+            ]
+        }
+    }
+}

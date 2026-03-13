@@ -2,8 +2,6 @@
 
 A PHP and Laravel package to parse and validate Egyptian National IDs (14 digits).
 
-Based on the algorithm and logic from [mahmoudEbeid2/egyptian-national-id](https://github.com/mahmoudEbeid2/egyptian-national-id).
-
 ## Installation
 
 You can install the package via Composer:
@@ -12,9 +10,10 @@ You can install the package via Composer:
 composer require aroon/egyptian-national-id-checker
 ```
 
-*(Note: Ensure you are requiring the local path in your project if you haven't published it to Packagist).*
+_(Note: Ensure you are requiring the local path in your project if you haven't published it to Packagist)._
 
 ## Features
+
 - **Sanitization**: Automatically cleans input by converting Arabic/Hindi numerals (٠-٩) to English numerals and stripping spaces or dashes.
 - **Validation**: Strict validation of the 14-digit format, century, birth date, governorate code, and check digit.
 - **Data extraction**: Easily extract birth date, gender, governorate, and age.
@@ -37,6 +36,7 @@ if ($id->isValid()) {
 ```
 
 ### 🧠 Static Safe Helpers
+
 Need a quick answer without crashing or handling invalid objects? Use the static safe helpers. They return `false` gracefully if the ID is malformed.
 
 ```php
@@ -46,6 +46,7 @@ EgyptianNationalId::checkIsAdult('29001011234567');// true
 ```
 
 ### 🎲 ID Generator (For Testing/Factories)
+
 Generate 100% mathematically correct National IDs matching precise criteria, great for Unit Tests:
 
 ```php
@@ -61,6 +62,7 @@ $specificId = EgyptianNationalId::generate([
 ```
 
 ### 🎛️ Data Engine (Collections and Big Data)
+
 To analyze arrays or databases packed with thousands of IDs, use `EgyptianNationalIdEngine`:
 
 ```php
@@ -108,7 +110,7 @@ public function store(Request $request)
 
     // Or the string syntax
     // 'national_id_field' => 'required|string|national_id',
-    
+
     // ...
 }
 ```
@@ -139,3 +141,7 @@ composer test
 ## License
 
 MIT License.
+
+## Note
+
+This package is based on the algorithm and logic from [mahmoudEbeid2/egyptian-national-id](https://github.com/mahmoudEbeid2/egyptian-national-id).
